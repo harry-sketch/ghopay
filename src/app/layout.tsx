@@ -4,7 +4,8 @@ import { type Metadata } from "next";
 import { Geist } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import { ThirdwebProvider } from "thirdweb/react";
+import { HydrateClient } from "../trpc/server";
+import Wrapper from "./_components/Wrapper";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -21,10 +22,13 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${geist.variable}`}>
+    <html lang="en" className={`${geist.variable} `}>
       <body>
         <TRPCReactProvider>
-          <ThirdwebProvider>{children}</ThirdwebProvider>
+          {children}
+          <HydrateClient>
+            <Wrapper>{children}</Wrapper>
+          </HydrateClient>
         </TRPCReactProvider>
       </body>
     </html>
