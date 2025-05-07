@@ -12,7 +12,7 @@ const Home = () => {
   const router = useRouter();
 
   return (
-    <main className="flex h-screen w-full flex-col items-center justify-center px-2 py-10 md:px-10">
+    <main className="flex h-screen w-full flex-col items-center px-2 py-10 md:px-10 md:py-20">
       <div className="flex w-full items-center justify-around gap-2">
         <div className="flex items-center gap-2">
           <Image
@@ -41,7 +41,7 @@ const Home = () => {
       </div>
 
       <div className="flex w-full flex-col items-start capitalize">
-        <div className="mb-2 text-xl font-medium capitalize">recent users</div>
+        <div className="mb-2 text-xl font-medium capitalize">recent</div>
         <div className="grid grid-cols-5 gap-2 md:grid-cols-8">
           {Array.from({ length: gg }).map((_, i) => (
             <div
@@ -67,6 +67,7 @@ const Home = () => {
           deposit
         </button>
         <button
+          onClick={() => router.push("/history")}
           type="button"
           className="text-medium flex w-full cursor-pointer items-center justify-center rounded-lg bg-[#E0FF99] px-2.5 py-4 text-center text-xl text-[#095711] capitalize md:h-16"
         >
@@ -75,6 +76,7 @@ const Home = () => {
       </div>
 
       <button
+        onClick={() => router.push("/contacts")}
         type="button"
         className="mx-auto flex w-full cursor-pointer items-center justify-center rounded-lg bg-[#005E0D] p-4 text-lg font-medium text-white md:w-96"
       >
