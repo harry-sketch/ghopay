@@ -1,12 +1,13 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { createThirdwebClient } from "thirdweb";
 import { ConnectButton, ThirdwebProvider } from "thirdweb/react";
 import { inAppWallet } from "thirdweb/wallets";
 
-const page = () => {
+const Login = () => {
   const wallet = inAppWallet({
     auth: {
       mode: "popup", // options are "popup" | "redirect" | "window";
@@ -19,25 +20,32 @@ const page = () => {
     clientId: "11061b92f667a9945df17ac608a2e196",
   });
 
+  const router = useRouter();
   return (
-    <div className="flex max-h-screen w-full flex-col items-center gap-56 border border-black">
-      <div className="flex items-center gap-3">
-        <Image
-          src="/assets/Logo.png"
-          alt="gopay"
-          width={100}
-          height={100}
-          className="object-contain"
-        />
+    <div className="flex h-full w-full items-center justify-center">
+      <div className="flex h-72 w-full flex-col items-center justify-between p-2">
+        <div className="flex items-center gap-3">
+          <Image
+            src="/assets/Logo.png"
+            alt="gopay"
+            width={100}
+            height={100}
+            className="object-contain"
+          />
 
-        <div className="text-4xl font-bold font-medium text-[#00D743]">
-          GHOPay
+          <div className="text-4xl font-bold text-[#00D743]">GHOPay</div>
         </div>
+
+        <button
+          type="button"
+          onClick={() => router.push("/")}
+          className="w-full cursor-pointer rounded-lg bg-[#005E0D] p-4 text-lg font-medium text-white md:w-96"
+        >
+          Connect
+        </button>
       </div>
-      {/* <div className="w-full rounded-lg bg-[#005E0D] p-4 text-lg font-medium text-white md:w-96"> */}{" "}
-      <ConnectButton client={client} wallets={[wallet]} /> {/* </div> */}
     </div>
   );
 };
 
-export default page;
+export default Login;
