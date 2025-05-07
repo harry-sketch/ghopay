@@ -16,7 +16,7 @@ const Contacts = () => {
   ] as const;
 
   return (
-    <div className="flex h-full flex-col items-center py-40">
+    <div className="flex h-full flex-col items-center px-2 py-10 md:py-20">
       <div className="mb-1 text-2xl font-medium text-[#005E0D]">
         Find Contacts
       </div>
@@ -25,7 +25,7 @@ const Contacts = () => {
         value={searchVal}
         placeholder="search contacts"
         onChange={(e) => setSearchVal(e.target.value)}
-        className="w-96 rounded-lg border border-[#5FE035] bg-[#D5FF7A] p-3 focus:outline-none"
+        className="w-full rounded-lg border border-[#5FE035] bg-[#D5FF7A] p-3 focus:outline-none md:w-96"
       />
 
       <div className="my-10 w-full">
@@ -44,7 +44,7 @@ const Contacts = () => {
 
       <div className="w-full p-2">
         <div className="text-base font-medium">From Contacts</div>
-        <div className="h-96 w-full overflow-y-auto">
+        <div className="h-fit w-full overflow-y-auto md:h-96">
           {dummyContestArr.map(({ name }) => (
             <Link
               key={name}

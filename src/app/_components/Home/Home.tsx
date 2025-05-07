@@ -12,7 +12,7 @@ const Home = () => {
   const router = useRouter();
 
   return (
-    <main className="flex h-full w-full flex-col items-center px-2 py-10 md:h-screen md:px-10 md:py-20">
+    <main className="flex h-full w-full flex-col items-center px-2 py-10 md:h-screen md:py-20">
       <div className="flex w-full items-center justify-around gap-2">
         <div className="flex items-center gap-2">
           <Image
