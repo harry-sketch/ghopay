@@ -8,7 +8,9 @@ interface Props {
 
 const Wrapper: React.FC<Props> = ({ children }) => {
   return (
-    <main className="mx-auto h-full max-w-2xl md:h-screen">{children}</main>
+    <main className="mx-auto h-full max-w-xl border md:h-screen">
+      {children}
+    </main>
   );
 };
 
