@@ -33,6 +33,7 @@
     "server-only": "^0.0.1",
     "superjson": "^2.2.1",
     "thirdweb": "^5.97.2",
+    "viem": "^2.29.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {

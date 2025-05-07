@@ -1,4 +1,5 @@
 import Image from "next/image";
+import FundWallet from "./_components/FundWallet";
 
 export default async function Home() {
   return (
