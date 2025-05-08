@@ -9,9 +9,7 @@ interface Props {
 
 const Wrapper: React.FC<Props> = ({ children }) => {
   return (
-    <main className="mx-auto flex h-screen max-w-5xl flex-col items-center justify-center">
-      {children}
-    </main>
+    <main className="mx-auto h-full max-w-xl md:h-screen">{children}</main>
   );
 };
 

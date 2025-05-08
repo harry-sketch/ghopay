@@ -30,10 +30,12 @@
     "postgres": "^3.4.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-qr-code": "^2.0.15",
     "server-only": "^0.0.1",
     "superjson": "^2.2.1",
     "thirdweb": "^5.97.2",
     "viem": "^2.29.0",
+    "usehooks-ts": "^3.1.1",
     "zod": "^3.24.2"
   },
   "devDependencies": {
