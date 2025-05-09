@@ -4,12 +4,24 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useMobile } from "~/app/_hooks/useMobile";
+import { useActiveAccount, useWalletBalance } from "thirdweb/react";
+import { client, lens } from "../../../server/web3/lib";
 
 const Home = () => {
   const { isMobile } = useMobile();
   const gg = isMobile ? 4 : 7;
 
   const router = useRouter();
+
+  const activeAccount = useActiveAccount();
+
+  const { data } = useWalletBalance({
+    address: activeAccount?.address,
+    chain: lens,
+    client: client,
+  });
+
+  console.log({ data });
 
   return (
     <main className="flex h-full w-full flex-col items-center px-2 py-10 md:h-screen md:py-20">
@@ -37,7 +49,7 @@ const Home = () => {
 
       <div className="my-5 flex h-40 w-full flex-col items-center justify-center rounded-lg bg-[#E0FF99] p-4 md:my-10">
         <div className="font-xl text-xl font-semibold capitalize">balance</div>
-        <div>-</div>
+        <div>{data?.displayValue} GHO</div>
       </div>
 
       <div className="flex w-full flex-col items-start capitalize">
