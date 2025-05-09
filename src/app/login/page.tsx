@@ -4,7 +4,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { ConnectButton } from "thirdweb/react";
-import { client, wallet } from "~/server/web3/lib";
+import { wallet } from "~/server/web3/lib";
+import { client } from "~/server/web3/client/client";
 
 const Login = () => {
   const router = useRouter();

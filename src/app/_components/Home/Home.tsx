@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { useMobile } from "~/app/_hooks/useMobile";
 import { useActiveAccount, useWalletBalance } from "thirdweb/react";
-import { client, lens } from "../../../server/web3/lib";
+import { client } from "~/server/web3/client/client";
+import { lens } from "~/server/web3/lib";
 
 const Home = () => {
   const { isMobile } = useMobile();

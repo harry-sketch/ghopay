@@ -1,10 +1,5 @@
-import { createThirdwebClient } from "thirdweb";
 import { inAppWallet } from "thirdweb/wallets";
 import { env } from "~/env";
-
-export const client = createThirdwebClient({
-  clientId: `${env.NEXT_PUBLIC_THIRDWEB_CLIENT}`,
-});
 
 export const wallet = inAppWallet({
   auth: {

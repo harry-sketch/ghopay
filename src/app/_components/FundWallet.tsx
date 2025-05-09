@@ -2,7 +2,8 @@
 
 import React from "react";
 import { lightTheme, PayEmbed } from "thirdweb/react";
-import { client, lens } from "~/server/web3/lib";
+import { lens } from "~/server/web3/lib";
+import { client } from "~/server/web3/client/client";
 
 const FundWallet = () => {
   return (
