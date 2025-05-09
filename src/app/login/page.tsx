@@ -3,26 +3,11 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { createThirdwebClient } from "thirdweb";
 import { ConnectButton } from "thirdweb/react";
-import { inAppWallet } from "thirdweb/wallets";
+import { client, wallet } from "~/server/web3/lib";
 
 const Login = () => {
   const router = useRouter();
-
-  const client = createThirdwebClient({
-    clientId: `${process.env.NEXT_PUBLIC_THIRDWEB_CLIENT}`,
-  });
-
-  const wallet = inAppWallet({
-    auth: {
-      mode: "popup", // options are "popup" | "redirect" | "window";
-      options: ["google", "email"], // ex: ["discord", "farcaster", "apple", "facebook", "google", "passkey"],
-    },
-    metadata: {
-      name: "GhoPay",
-    },
-  });
 
   return (
     <div className="flex h-full w-full items-center justify-center">
@@ -48,6 +33,9 @@ const Login = () => {
         </button> */}
 
         <ConnectButton
+          connectButton={{
+            className: "custom-connect_btn",
+          }}
           client={client}
           wallets={[wallet]}
           onConnect={() => router.push("/")}
