@@ -1,12 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import "~/styles/globals.css";
 
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
 
+import { LensProvider } from "@lens-protocol/react";
+
 import { TRPCReactProvider } from "~/trpc/react";
 import { HydrateClient } from "../trpc/server";
 import Wrapper from "./_components/Wrapper";
 import { ThirdwebProvider } from "thirdweb/react";
+import { lensclient } from "../app/lens/client";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
