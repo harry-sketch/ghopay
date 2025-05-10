@@ -8,7 +8,6 @@ import { LensProvider } from "@lens-protocol/react";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { HydrateClient } from "../trpc/server";
-import Wrapper from "./_components/Wrapper";
 import { ThirdwebProvider } from "thirdweb/react";
 import { lensclient } from "../app/lens/client";
 
@@ -31,9 +30,10 @@ export default function RootLayout({
       <body>
         <TRPCReactProvider>
           <ThirdwebProvider>
-            {children}
             <HydrateClient>
-              <Wrapper>{children}</Wrapper>
+              <main className="mx-auto h-full max-w-xl md:h-screen">
+                {children}
+              </main>
             </HydrateClient>
           </ThirdwebProvider>
         </TRPCReactProvider>

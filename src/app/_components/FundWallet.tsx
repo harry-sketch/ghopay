@@ -1,36 +1,11 @@
 "use client";
 
 import React from "react";
-import { createThirdwebClient } from "thirdweb";
 import { lightTheme, PayEmbed } from "thirdweb/react";
+import { lens } from "~/server/web3/lib";
+import { client } from "~/server/web3/client/client";
 
 const FundWallet = () => {
-  const client = createThirdwebClient({
-    clientId: `${process.env.NEXT_PUBLIC_THIRDWEB_CLIENT}`,
-  });
-
-  const lens = {
-    id: 232,
-    name: "Lens Mainnet",
-    nativeCurrency: { name: "GHO", symbol: "GHO", decimals: 18 },
-    rpcUrls: {
-      default: {
-        http: [
-          `https://232.rpc.thirdweb.com/${process.env.NEXT_PUBLIC_THIRDWEB_CLIENT}`,
-          "https://rpc.lens.xyz",
-        ],
-      },
-    },
-    rpc: "https://rpc.lens.xyz",
-    blockExplorers: [
-      {
-        name: "Lens Block Explorer",
-        url: "https://explorer.lens.xyz",
-        apiUrl: "https://explorer.lens.xyz/api",
-      },
-    ],
-  };
-
   return (
     <PayEmbed
       client={client}
