@@ -13,7 +13,7 @@ export const AccountMetadataFragment = graphql(
       bio
 
       thumbnail: picture(
-        request: { preferTransform: { fixedSize: { height: 128, witdh: 128 } } }
+        request: { preferTransform: { fixedSize: { height: 128, width: 128 } } }
       )
       picture
     }

@@ -1,19 +1,62 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMobile } from "~/app/_hooks/useMobile";
+import { evmAddress } from "@lens-protocol/client";
+import { fetchFollowers } from "@lens-protocol/client/actions";
+import { lensclient } from "~/app/lens/client";
+import { useAccount } from "wagmi";
+import { log } from "console";
+
+const useFollowers = async (address: string) => {
+  const result = await fetchFollowers(lensclient, {
+    account: evmAddress(address),
+  });
+
+  console.log({ result });
+  return result;
+};
 
 const Contacts = () => {
+  const { address } = useAccount();
+  console.log({ address });
+
+  const data = useFollowers(address!);
+
   const { isMobile } = useMobile();
   const gg = isMobile ? 4 : 7;
   const [searchVal, setSearchVal] = useState("");
+  const [followers, setFollowers] = useState(null);
 
   const dummyContestArr = [
     { name: "harsh" },
     { name: "ramit" },
     { name: "deepso" },
   ] as const;
+
+  useEffect(() => {
+    const getFollowers = async () => {
+      if (!address) return;
+      try {
+        const result = await fetchFollowers(lensclient, {
+          account: evmAddress(address),
+          filter: {
+            graphs: [{ globalGraph: true }],
+          },
+        });
+        console.log({ result });
+
+        setFollowers(result);
+      } catch (error) {
+        console.error("Error fetching followers:", error);
+      }
+    };
+
+    void getFollowers();
+  }, [address]);
+
+  console.log({ followers });
 
   return (
     <div className="flex h-full flex-col items-center px-2 py-10 md:py-20">
