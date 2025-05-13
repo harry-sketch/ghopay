@@ -6,9 +6,15 @@ import React from "react";
 import { ConnectButton } from "thirdweb/react";
 import { wallet } from "~/server/web3/lib";
 import { client } from "~/server/web3/client/client";
+import { api } from "../../trpc/react";
+import { defineChain } from "thirdweb";
 
 const Login = () => {
   const router = useRouter();
+
+  const chain = defineChain(232);
+
+  const { mutateAsync } = api.auth.login.useMutation();
 
   return (
     <div className="flex h-full w-full items-center justify-center">
@@ -25,21 +31,29 @@ const Login = () => {
           <div className="text-4xl font-bold text-[#00D743]">GHOPay</div>
         </div>
 
-        {/* <button
-          type="button"
-          onClick={() => router.push("/")}
-          className="w-full cursor-pointer rounded-lg bg-[#005E0D] p-4 text-lg font-medium text-white md:w-96"
-        >
-          Connect
-        </button> */}
-
         <ConnectButton
           connectButton={{
             className: "custom-connect_btn",
           }}
+          chain={chain}
           client={client}
           wallets={[wallet]}
-          onConnect={() => router.push("/")}
+          onConnect={async (wallet) => {
+            try {
+              const account = wallet.getAccount();
+
+              if (account) {
+                await mutateAsync({
+                  email: "harshbisht90@gmail.com",
+                  walletAddress: account?.address,
+                });
+              }
+
+              router.push("/");
+            } catch (error) {
+              console.log({ error });
+            }
+          }}
         />
       </div>
     </div>

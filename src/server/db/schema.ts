@@ -28,8 +28,9 @@ export const createTable = pgTableCreator((name) => `${name}`);
 
 export const Users = createTable("user", {
   id: serial().primaryKey(),
-  email: text().notNull(),
+  email: text(),
   lens: text(),
+  walletAddress: text().notNull(),
   gpoints: integer().default(0),
   referredBy: text(),
   createdAt: timestamp().defaultNow().notNull(),
