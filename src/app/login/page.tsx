@@ -14,7 +14,9 @@ const Login = () => {
 
   const chain = defineChain(232);
 
-  const { mutateAsync } = api.auth.login.useMutation();
+  const { mutateAsync } = api.auth.login.useMutation({
+    onSuccess: () => router.push("/"),
+  });
 
   return (
     <div className="flex h-full w-full items-center justify-center">
@@ -48,8 +50,6 @@ const Login = () => {
                   walletAddress: account?.address,
                 });
               }
-
-              router.push("/");
             } catch (error) {
               console.log({ error });
             }

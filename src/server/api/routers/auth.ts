@@ -12,13 +12,23 @@ export const authRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const user = {
-        email: input.email,
-        walletAddress: input.walletAddress,
-      };
-
-      await ctx.db.insert(Users).values(user).onConflictDoNothing();
       try {
+        const existingUser = await ctx.db.query.Users.findFirst({
+          where: (users, { eq, or }) =>
+            or(
+              eq(users.email, input.email),
+              eq(users.walletAddress, input.walletAddress),
+            ),
+        });
+
+        if (!existingUser) {
+          const user = {
+            email: input.email,
+            walletAddress: input.walletAddress,
+          };
+
+          await ctx.db.insert(Users).values(user).onConflictDoNothing();
+        }
       } catch (error) {
         console.log({ error });
         throw new TRPCError({
