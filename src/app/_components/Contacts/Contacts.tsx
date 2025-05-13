@@ -43,7 +43,7 @@ const Contacts = () => {
         <div>recent</div>
       </div>
 
-      <div className="my-4 flex items-center gap-1.5 rounded-lg border border-green-400 bg-[#BBF4CF] px-2 py-3">
+      <div className="my-4 flex items-center gap-1.5 rounded-lg border border-[#00D743]/80 bg-[#00D743]/50 px-2 py-3">
         <div>{commonIcons.search}</div>
         <input
           type="text"
@@ -54,11 +54,11 @@ const Contacts = () => {
         />
       </div>
 
-      <div className="h-[26.5rem] overflow-y-auto rounded-lg bg-[#ccc]/10 p-4">
+      <div className="h-[26.5rem] overflow-y-auto rounded-lg bg-white p-4">
         {dummyContestArr.map(({ name }) => (
           <Link
             href={`/pay/${name}?customBg=${encodeURIComponent(bg)}`}
-            className="mb-2 flex w-full cursor-pointer items-center gap-4 rounded-lg p-1.5 transition-all duration-300 ease-in-out hover:bg-[#E0FF99]"
+            className="mb-2 flex w-full cursor-pointer items-center gap-4 rounded-lg p-1.5 transition-all duration-300 ease-in-out hover:bg-[#00D743] hover:text-white"
             key={name}
           >
             <div

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { use, useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import { commonIcons } from "~/app/_assets/commonIcons";
 
 type Params = Promise<{ name: string }>;
@@ -12,11 +12,17 @@ const PayName = ({ params }: { params: Params }) => {
 
   const router = useRouter();
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const searchParam = useSearchParams();
 
   const customBg = searchParam.get("customBg") ?? "";
 
   const [amount, setAmount] = useState(0);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   return (
     <div className="px-2 py-10 md:px-0 md:py-20">
@@ -46,32 +52,29 @@ const PayName = ({ params }: { params: Params }) => {
           {param.name}
         </div>
 
-        <div className="mx-auto my-4 flex items-center justify-center border-b text-lg font-medium">
-          <div className="text-center">$</div>
-          <input
-            type="text"
-            value={amount}
-            onChange={(e) => {
-              if (isNaN(Number(e.target.value))) {
-                return;
-              }
-              setAmount(Number(e.target.value));
-            }}
-            placeholder="enter amount"
-            className="w-fit text-center focus:outline-none"
-          />
-        </div>
-
         <input
+          ref={inputRef}
           type="text"
-          placeholder="Add a note"
-          className="mt-5 w-full border-b border-[#5FE035] focus:outline-none md:w-96"
+          value={amount}
+          onChange={(e) => {
+            if (isNaN(Number(e.target.value))) {
+              return;
+            }
+            setAmount(Number(e.target.value));
+          }}
+          placeholder="enter amount"
+          className="my-5 w-fit text-center text-4xl focus:outline-none"
         />
+
+        <div className="mx-auto flex w-fit items-center justify-center gap-1 text-xl font-medium">
+          <div>{amount}</div>
+          <div className="text-center">GHO</div>
+        </div>
       </div>
 
       <button
         type="button"
-        className="mx-auto flex w-full cursor-pointer items-center justify-center rounded-lg bg-[#005E0D] p-4 text-lg font-medium text-white md:w-96"
+        className="mx-auto flex w-full cursor-pointer items-center justify-center rounded-lg bg-[#00D743] p-4 text-lg font-medium text-white md:w-96"
       >
         Pay
       </button>
@@ -79,7 +82,7 @@ const PayName = ({ params }: { params: Params }) => {
       <button
         onClick={() => router.push("/contacts")}
         type="button"
-        className="mx-auto mt-4 flex w-full cursor-pointer items-center justify-center rounded-lg bg-black p-4 text-lg font-medium text-white md:w-96"
+        className="mx-auto mt-4 flex w-full cursor-pointer items-center justify-center rounded-lg p-4 text-lg font-medium text-black md:w-96"
       >
         <div>{commonIcons["chevron-left"]}</div>
 
