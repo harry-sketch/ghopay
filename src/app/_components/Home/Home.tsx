@@ -25,7 +25,7 @@ const Home = () => {
   console.log({ data });
 
   return (
-    <main className="flex h-full w-full flex-col items-center px-2 py-10 md:h-screen md:py-20">
+    <main className="flex h-full w-full flex-col items-center px-2 py-10 md:h-screen md:px-0 md:py-20">
       <div className="flex w-full items-center justify-around gap-2">
         <div className="flex items-center gap-2">
           <Image
@@ -48,9 +48,9 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="my-5 flex h-40 w-full flex-col items-center justify-center rounded-lg bg-[#E0FF99] p-4 md:my-10">
+      <div className="my-5 flex h-40 w-full flex-col items-center justify-center rounded-lg bg-[#BBF4CF] p-4 md:my-10">
         <div className="font-xl text-xl font-semibold capitalize">balance</div>
-        <div>{data?.displayValue} GHO</div>
+        <div className="mt-1 text-xl font-medium">{data?.displayValue} GHO</div>
       </div>
 
       <div className="flex w-full flex-col items-start capitalize">
@@ -75,14 +75,14 @@ const Home = () => {
         <button
           onClick={() => router.push("/funds")}
           type="button"
-          className="text-medium flex w-full cursor-pointer items-center justify-center rounded-lg bg-[#E0FF99] px-2.5 py-4 text-center text-xl text-[#095711] capitalize md:h-16"
+          className="text-medium flex w-full cursor-pointer items-center justify-center rounded-lg bg-[#BBF4CF] px-2.5 py-4 text-center text-xl text-[#095711] capitalize md:h-16"
         >
           deposit
         </button>
         <button
           onClick={() => router.push("/history")}
           type="button"
-          className="text-medium flex w-full cursor-pointer items-center justify-center rounded-lg bg-[#E0FF99] px-2.5 py-4 text-center text-xl text-[#095711] capitalize md:h-16"
+          className="text-medium flex w-full cursor-pointer items-center justify-center rounded-lg bg-[#BBF4CF] px-2.5 py-4 text-center text-xl text-[#095711] capitalize md:h-16"
         >
           history
         </button>
