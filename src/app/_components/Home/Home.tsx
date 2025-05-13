@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import React from "react";
 import { useMobile } from "~/app/_hooks/useMobile";
 import { useActiveAccount, useWalletBalance } from "thirdweb/react";
@@ -21,6 +21,10 @@ const Home = () => {
     chain: lens,
     client: client,
   });
+
+  if (!activeAccount) {
+    redirect("/login");
+  }
 
   return (
     <main className="flex h-full w-full flex-col items-center px-2 py-10 md:h-screen md:px-0 md:py-20">
