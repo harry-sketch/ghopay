@@ -8,6 +8,8 @@ import { fetchFollowers } from "@lens-protocol/client/actions";
 import { lensclient } from "~/app/lens/client";
 import { useAccount } from "wagmi";
 import { log } from "console";
+import { Login } from "../Lens/Login";
+import { useAuthenticatedUser } from "@lens-protocol/react";
 
 const useFollowers = async (address: string) => {
   const result = await fetchFollowers(lensclient, {
@@ -21,8 +23,11 @@ const useFollowers = async (address: string) => {
 const Contacts = () => {
   const { address } = useAccount();
   console.log({ address });
+  const { data: authenticatedUser, loading: authUserLoading } =
+    useAuthenticatedUser();
 
-  const data = useFollowers(address!);
+  const data = useFollowers(authenticatedUser?.address ?? "");
+  console.log({ data });
 
   const { isMobile } = useMobile();
   const gg = isMobile ? 4 : 7;
@@ -42,25 +47,24 @@ const Contacts = () => {
   useEffect(() => {
     const getFollowers = async () => {
       console.log({ address });
+      console.log({ authenticatedUser, authUserLoading });
 
       if (!address) return;
       try {
         const result = await fetchFollowers(lensclient, {
-          account: evmAddress(address),
+          account: evmAddress(authenticatedUser?.address ?? ""),
           filter: {
             graphs: [{ globalGraph: true }],
           },
         });
         console.log({ result });
-
-        setFollowers(result);
       } catch (error) {
         console.error("Error fetching followers:", error);
       }
     };
 
     void getFollowers();
-  }, [address]);
+  }, [authenticatedUser]);
 
   console.log({ followers });
 
@@ -111,7 +115,9 @@ const Contacts = () => {
     //     ))}
     //   </div>
     // </div>
-    <div>ggg</div>
+    <div>
+      <Login />
+    </div>
   );
 };
 

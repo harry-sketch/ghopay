@@ -8,7 +8,6 @@ import { fetchAccount } from "@lens-protocol/client/actions";
 export const lensclient = PublicClient.create({
   environment: mainnet,
   fragments,
-  apiKey: "uzNk4Y-62-OIY_kIWuj25fZ7dU84-TqZ9i",
 });
 
 export const getAuthenticatedAccount = async () => {
