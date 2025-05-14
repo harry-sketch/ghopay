@@ -7,6 +7,8 @@ import { ConnectButton } from "thirdweb/react";
 import { wallet } from "~/server/web3/lib";
 import { client } from "~/server/web3/client/client";
 import { api } from "../../trpc/react";
+import { getUserEmail } from "thirdweb/wallets/in-app";
+
 import { defineChain } from "thirdweb";
 
 const Login = () => {
@@ -43,10 +45,11 @@ const Login = () => {
           onConnect={async (wallet) => {
             try {
               const account = wallet.getAccount();
+              const email = await getUserEmail({ client });
 
               if (account) {
                 await mutateAsync({
-                  email: "harshbisht90@gmail.com",
+                  email: email ?? "",
                   walletAddress: account?.address,
                 });
               }
