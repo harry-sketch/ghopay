@@ -47,9 +47,9 @@ const Login = () => {
               const account = wallet.getAccount();
               const email = await getUserEmail({ client });
 
-              if (account) {
+              if (account && email) {
                 await mutateAsync({
-                  email: email ?? "",
+                  email: email,
                   walletAddress: account?.address,
                 });
               }
