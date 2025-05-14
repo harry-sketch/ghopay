@@ -27,7 +27,7 @@ export default function RootLayout({
       <body>
         <TRPCReactProvider>
           <HydrateClient>
-            <main className="mx-auto h-full max-w-xl md:h-screen">
+            <main className="mx-auto h-full max-w-full md:h-screen md:max-w-xl">
               <ClientLayout> {children}</ClientLayout>
             </main>
           </HydrateClient>
