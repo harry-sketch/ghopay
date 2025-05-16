@@ -8,6 +8,7 @@ import { fetchAccount } from "@lens-protocol/client/actions";
 export const lensclient = PublicClient.create({
   environment: mainnet,
   fragments,
+  storage: (typeof window !== "undefined" && window.localStorage) || undefined,
 });
 
 export const getAuthenticatedAccount = async () => {

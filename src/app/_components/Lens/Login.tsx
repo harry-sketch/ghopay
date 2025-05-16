@@ -14,7 +14,6 @@ export const Login = () => {
   const [showAccountSelector, setShowAccountSelector] = useState(false);
   const { data: authenticatedUser, loading: authUserLoading } =
     useAuthenticatedUser();
-
   console.log(authenticatedUser);
 
   return (

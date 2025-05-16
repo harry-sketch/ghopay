@@ -2,12 +2,11 @@
 
 import React from "react";
 import { lightTheme, PayEmbed } from "thirdweb/react";
-import { lens } from "~/server/web3/lib";
+
 import { client } from "~/server/web3/client/client";
 import { defineChain, NATIVE_TOKEN_ADDRESS } from "thirdweb";
 import { useActiveWallet } from "thirdweb/react";
 import { useActiveAccount } from "thirdweb/react";
-import { getProfiles } from "thirdweb/wallets";
 
 const lensChain = defineChain({ id: 232 });
 
