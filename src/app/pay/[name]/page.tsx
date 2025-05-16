@@ -2,12 +2,19 @@
 
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
+
 import React, { use, useEffect, useRef, useState } from "react";
+import { prepareTransaction, sendTransaction } from "thirdweb";
+import { useActiveAccount } from "thirdweb/react";
+import { parseEther } from "viem";
 import { commonIcons } from "~/app/_assets/commonIcons";
+import { client } from "~/server/web3/client/client";
+import { lens } from "~/server/web3/lib";
 
 type Params = Promise<{ name: string }>;
 
 const PayName = ({ params }: { params: Params }) => {
+  const activeAccount = useActiveAccount();
   const param = use(params);
 
   const router = useRouter();
@@ -19,6 +26,23 @@ const PayName = ({ params }: { params: Params }) => {
   const customBg = searchParam.get("customBg") ?? "";
 
   const [amount, setAmount] = useState(0);
+
+  const handleTxn = async (address: string, amount: string) => {
+    const transaction = prepareTransaction({
+      to: address,
+      value: parseEther(amount),
+      chain: lens,
+      client: client,
+    });
+
+    if (activeAccount) {
+      const res = await sendTransaction({
+        transaction,
+        account: activeAccount,
+      });
+      console.log({ res });
+    }
+  };
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -75,6 +99,12 @@ const PayName = ({ params }: { params: Params }) => {
       <button
         type="button"
         className="mx-auto flex w-full cursor-pointer items-center justify-center rounded-lg bg-[#00D743] p-4 text-lg font-medium text-white md:w-96"
+        onClick={async () => {
+          await handleTxn(
+            "0x905040585A59C5B0E83Be2b247fC15a81FF4E533", // need to make it dynamic
+            String(amount),
+          );
+        }}
       >
         Pay
       </button>
