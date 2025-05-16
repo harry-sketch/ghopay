@@ -25,7 +25,7 @@ const PayName = ({ params }: { params: Params }) => {
 
   const customBg = searchParam.get("customBg") ?? "";
 
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState("0");
 
   const handleTxn = async (address: string, amount: string) => {
     const transaction = prepareTransaction({
@@ -42,6 +42,7 @@ const PayName = ({ params }: { params: Params }) => {
       });
       console.log({ res });
     }
+    // add toast
   };
 
   useEffect(() => {
@@ -81,10 +82,10 @@ const PayName = ({ params }: { params: Params }) => {
           type="text"
           value={amount}
           onChange={(e) => {
-            if (isNaN(Number(e.target.value))) {
+            if (String(e.target.value) === "0") {
               return;
             }
-            setAmount(Number(e.target.value));
+            setAmount(String(e.target.value));
           }}
           placeholder="enter amount"
           className="my-5 w-fit text-center text-4xl focus:outline-none"
@@ -96,6 +97,7 @@ const PayName = ({ params }: { params: Params }) => {
         </div>
       </div>
 
+      {/* add confirmation modal */}
       <button
         type="button"
         className="mx-auto flex w-full cursor-pointer items-center justify-center rounded-lg bg-[#00D743] p-4 text-lg font-medium text-white md:w-96"
