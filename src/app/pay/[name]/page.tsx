@@ -3,14 +3,26 @@
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { use, useEffect, useRef, useState } from "react";
+import { prepareTransaction, sendTransaction } from "thirdweb";
+import { parseEther } from "viem";
 import { commonIcons } from "~/app/_assets/commonIcons";
+import { lens } from "~/server/web3/lib";
+import { client } from "~/server/web3/client/client";
+import { useActiveAccount } from "thirdweb/react";
+import { useToast } from "~/app/_hooks/useToast";
 
 type Params = Promise<{ name: string }>;
 
 const PayName = ({ params }: { params: Params }) => {
   const param = use(params);
 
+  const activeAccount = useActiveAccount();
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const router = useRouter();
+
+  const { toast } = useToast();
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -20,7 +32,40 @@ const PayName = ({ params }: { params: Params }) => {
 
   const address = searchParam.get("add") ?? "";
 
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState("0");
+
+  const handleTxn = async (address: string, amount: string) => {
+    try {
+      if (!activeAccount) return;
+
+      setIsLoading(true);
+
+      const transaction = prepareTransaction({
+        to: address,
+        value: parseEther(amount),
+        chain: lens,
+        client: client,
+      });
+
+      const res = await sendTransaction({
+        transaction,
+        account: activeAccount,
+      });
+      console.log({ res });
+
+      setIsLoading(false);
+      toast.success({
+        title: `transaction successfull`,
+        message: `https://explorer.lens.xyz/tx/${res.transactionHash}`,
+      });
+    } catch (error) {
+      console.log({ error });
+      toast.error({
+        message: "error in sending gho",
+        title: "error in sending gho",
+      });
+    }
+  };
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -64,10 +109,7 @@ const PayName = ({ params }: { params: Params }) => {
           type="text"
           value={amount}
           onChange={(e) => {
-            if (isNaN(Number(e.target.value))) {
-              return;
-            }
-            setAmount(Number(e.target.value));
+            setAmount(e.target.value);
           }}
           placeholder="enter amount"
           className="my-5 w-fit text-center text-4xl focus:outline-none"
@@ -80,10 +122,15 @@ const PayName = ({ params }: { params: Params }) => {
       </div>
 
       <button
+        disabled={isLoading}
+        onClick={async () => {
+          console.log("started");
+          await handleTxn(address, String(amount));
+        }}
         type="button"
-        className="mx-auto flex w-full cursor-pointer items-center justify-center rounded-lg bg-[#00D743] p-4 text-lg font-medium text-white md:w-96"
+        className={`mx-auto flex w-full cursor-pointer items-center justify-center rounded-lg bg-[#00D743] p-4 text-lg font-medium text-white md:w-96 ${isLoading && "opacity-50"}`}
       >
-        Pay
+        {isLoading ? "please wait.." : "Pay"}
       </button>
 
       <button

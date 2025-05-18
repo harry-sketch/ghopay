@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import "~/styles/globals.css";
 
 import { type Metadata } from "next";
@@ -7,6 +6,7 @@ import { Inter } from "next/font/google";
 import { TRPCReactProvider } from "~/trpc/react";
 import { HydrateClient } from "../trpc/server";
 import ClientLayout from "./ClientLayout";
+import { ToastContainer } from "react-toastify";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -25,6 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable} `}>
       <body>
+        <ToastContainer position="bottom-right" />
         <TRPCReactProvider>
           <HydrateClient>
             <main className="mx-auto h-full max-w-full md:h-screen md:max-w-xl">
