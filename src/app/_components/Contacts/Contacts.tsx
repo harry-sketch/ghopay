@@ -5,19 +5,20 @@ import React, { useEffect, useState } from "react";
 import { useMobile } from "~/app/_hooks/useMobile";
 import {
   evmAddress,
-  ResultAsync,
-  UnexpectedError,
   type Follower,
-  type Paginated,
+  type Result,
+  type Username,
 } from "@lens-protocol/client";
+
 import { fetchFollowers } from "@lens-protocol/client/actions";
 import { lensclient } from "~/app/lens/client";
 import { useAccount } from "wagmi";
-import { log } from "console";
 import { Login } from "../Lens/Login";
 import { useAuthenticatedUser } from "@lens-protocol/react";
 import router from "next/router";
 import { commonIcons } from "~/app/_assets/commonIcons";
+import { fetchUsername } from "@lens-protocol/client/actions";
+import { P } from "node_modules/@lens-protocol/client/dist/clients-BIWijcqE";
 
 const fetchFollowersData = async (address: string) => {
   const resumed = await lensclient.resumeSession();
@@ -46,6 +47,8 @@ const Contacts = () => {
   const { data: authenticatedUser, loading: authUserLoading } =
     useAuthenticatedUser();
 
+  const [searchUserResult, setSearchUserResult] =
+    useState<Result<Username | null, UnexpectedError>>();
   const { isMobile } = useMobile();
   const gg = isMobile ? 4 : 7;
   const [searchVal, setSearchVal] = useState("");
@@ -61,6 +64,27 @@ const Contacts = () => {
   }, [authenticatedUser?.address]);
 
   console.log({ followers });
+
+  const handleSearch = async (searchUser: string) => {
+    const resumed = await lensclient.resumeSession();
+
+    if (resumed.isErr()) {
+      return console.error(resumed.error);
+    }
+
+    const sessionClient = resumed.value;
+
+    const result = await fetchUsername(sessionClient, {
+      username: {
+        localName: searchUser,
+        // namespace: evmAddress("0x1234…"), - optional for custom namespaces
+      },
+    });
+
+    setSearchUserResult(result);
+  };
+
+  console.log({ searchUserResult });
 
   return (
     <>
@@ -80,7 +104,10 @@ const Contacts = () => {
           <input
             type="text"
             value={searchVal}
-            onChange={(e) => setSearchVal(e.target.value)}
+            onChange={async (e) => {
+              setSearchVal(e.target.value);
+              await handleSearch(e.target.value);
+            }}
             placeholder="search contacts.."
             className="w-full bg-transparent py-1 text-base font-medium text-black placeholder:text-black focus:outline-none"
           />
@@ -88,8 +115,6 @@ const Contacts = () => {
 
         <div className="h-[26.5rem] overflow-y-auto rounded-lg bg-white p-4">
           {followers.map(({ follower }, i) => {
-            console.log({ follower });
-
             return <div key={i}>{follower.username?.localName}</div>;
           })}
         </div>
