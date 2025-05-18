@@ -2,6 +2,8 @@ import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { Users } from "../../db/schema";
 import { z } from "zod";
+import { createAndSetToken, TOKEN_COOKIE } from "../../lib/server-utils";
+import { cookies } from "next/headers";
 
 export const authRouter = createTRPCRouter({
   login: publicProcedure
@@ -29,6 +31,25 @@ export const authRouter = createTRPCRouter({
 
           await ctx.db.insert(Users).values(user).onConflictDoNothing();
         }
+
+        const user = await ctx.db.query.Users.findFirst({
+          where: (s, { eq }) => eq(s.email, input.email),
+        });
+
+        console.log({ user });
+
+        if (!user)
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "User not found after creation",
+          });
+
+        await createAndSetToken({
+          email: input.email,
+          userId: user.id,
+        });
+
+        return true;
       } catch (error) {
         console.log({ error });
         throw new TRPCError({
@@ -38,4 +59,15 @@ export const authRouter = createTRPCRouter({
         });
       }
     }),
+
+  logout: publicProcedure.mutation(async () => {
+    const c = await cookies();
+    c.delete(TOKEN_COOKIE);
+
+    return;
+  }),
+
+  session: publicProcedure.query(async ({ ctx }) => {
+    return ctx.user;
+  }),
 });

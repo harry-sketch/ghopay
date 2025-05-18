@@ -11,6 +11,8 @@ import { lens } from "~/server/web3/lib";
 import { client } from "~/server/web3/client/client";
 import { useActiveAccount } from "thirdweb/react";
 import { useToast } from "~/app/_hooks/useToast";
+import { api } from "../../../trpc/react";
+import { getUserEmail } from "thirdweb/wallets";
 
 type Params = Promise<{ name: string }>;
 
@@ -18,13 +20,15 @@ const PayName = ({ params }: { params: Params }) => {
   const activeAccount = useActiveAccount();
   const param = use(params);
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
   const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { toast } = useToast();
 
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const { mutateAsync } = api.transaction.sendTransaction.useMutation();
 
   const searchParam = useSearchParams();
 
@@ -47,19 +51,35 @@ const PayName = ({ params }: { params: Params }) => {
         client: client,
       });
 
+      console.log({ transaction });
+
       const res = await sendTransaction({
         transaction,
         account: activeAccount,
       });
       console.log({ res });
 
-      setIsLoading(false);
-      toast.success({
-        title: `transaction successfull`,
-        message: `https://explorer.lens.xyz/tx/${res.transactionHash}`,
-      });
+      const email = await getUserEmail({ client });
+
+      if (res.transactionHash && email) {
+        await mutateAsync({
+          email,
+          amount,
+          from: activeAccount?.address,
+          to: address,
+          transactionHash: res.transactionHash,
+        });
+
+        toast.success({
+          title: `transaction successfull`,
+          message: `https://explorer.lens.xyz/tx/${res.transactionHash}`,
+        });
+
+        setIsLoading(false);
+      }
     } catch (error) {
       console.log({ error });
+      setIsLoading(false);
       toast.error({
         message: "error in sending gho",
         title: "error in sending gho",
