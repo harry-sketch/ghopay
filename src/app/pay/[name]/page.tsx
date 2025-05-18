@@ -88,13 +88,19 @@ const PayName = ({ params }: { params: Params }) => {
 
       <div className="mx-auto my-5 flex flex-col items-center justify-center md:my-10">
         <div className="flex h-28 w-28 items-center justify-center rounded-full text-center text-2xl font-bold text-black capitalize">
-          <Image
-            src={pfp}
-            alt={"gg"}
-            width={120}
-            height={120}
-            className="rounded-full object-contain"
-          />
+          {pfp ? (
+            <Image
+              src={pfp}
+              alt={"gg"}
+              width={120}
+              height={120}
+              className="rounded-full object-contain"
+            />
+          ) : (
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-red-400 text-xl text-white capitalize">
+              {param.name.slice(0, 1)}
+            </div>
+          )}
         </div>
         <div className="mt-5 text-2xl font-semibold text-[#00D743] capitalize md:text-4xl">
           {param.name}
