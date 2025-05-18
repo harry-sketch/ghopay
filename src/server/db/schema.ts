@@ -53,7 +53,7 @@ export const Transactions = createTable("transactions", {
   transactionUserId: integer()
     .notNull()
     .references(() => Users.id),
-  amount: integer().notNull().default(0),
+  amount: text(),
   transactionTo: text().notNull(),
   transactionFrom: text().notNull(),
   transactionHash: text().notNull(),
