@@ -10,7 +10,11 @@ import { useActiveAccount } from "thirdweb/react";
 
 const lensChain = defineChain({ id: 232 });
 
-const FundWallet = () => {
+interface FundWalletProps {
+  amount: string;
+}
+
+const FundWallet = ({ amount }: FundWalletProps) => {
   const activeAccount = useActiveAccount();
 
   const wallet = useActiveWallet();
@@ -37,7 +41,7 @@ const FundWallet = () => {
           chain: lensChain,
 
           // amount of token to buy
-          amount: "1",
+          amount: amount,
 
           // Lens Account address
           sellerAddress: activeAccount?.address ?? "",
