@@ -16,7 +16,9 @@ const PayName = ({ params }: { params: Params }) => {
 
   const searchParam = useSearchParams();
 
-  const customBg = searchParam.get("customBg") ?? "";
+  const pfp = searchParam.get("pfp") ?? "";
+
+  const address = searchParam.get("add") ?? "";
 
   const [amount, setAmount] = useState(0);
 
@@ -40,16 +42,21 @@ const PayName = ({ params }: { params: Params }) => {
       </div>
 
       <div className="mx-auto my-5 flex flex-col items-center justify-center md:my-10">
-        <div
-          style={{
-            backgroundColor: customBg,
-          }}
-          className="flex h-28 w-28 items-center justify-center rounded-full text-center text-2xl font-bold text-black capitalize"
-        >
-          {param.name.slice(0, 1)}
+        <div className="flex h-28 w-28 items-center justify-center rounded-full text-center text-2xl font-bold text-black capitalize">
+          <Image
+            src={pfp}
+            alt={"gg"}
+            width={120}
+            height={120}
+            className="rounded-full object-contain"
+          />
         </div>
         <div className="mt-5 text-2xl font-semibold text-[#00D743] capitalize md:text-4xl">
           {param.name}
+        </div>
+
+        <div className="mt-5 text-2xl font-semibold text-[#00D743] capitalize md:text-4xl">
+          {`${address.slice(0, 5)}....${address.slice(-5)}`}
         </div>
 
         <input

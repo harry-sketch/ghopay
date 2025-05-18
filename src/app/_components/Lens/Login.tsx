@@ -4,16 +4,12 @@ import { Button } from "~/components/ui/button";
 import { DialogTrigger } from "~/components/ui/dialog";
 import { useAuthenticatedUser } from "@lens-protocol/react";
 import { ConnectKitButton } from "connectkit";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AccountSelector } from "./Accounts";
-import { lensclient } from "~/app/lens/client";
-import { fetchAccount } from "@lens-protocol/client/actions";
-import { get } from "http";
 
 export const Login = () => {
   const [showAccountSelector, setShowAccountSelector] = useState(false);
-  const { data: authenticatedUser, loading: authUserLoading } =
-    useAuthenticatedUser();
+  const { data: authenticatedUser } = useAuthenticatedUser();
   console.log(authenticatedUser);
 
   return (
@@ -24,7 +20,6 @@ export const Login = () => {
           show,
           truncatedAddress,
           ensName,
-          chain,
         }) => {
           const connectKitDisplayName = ensName ?? truncatedAddress;
 
