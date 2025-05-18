@@ -98,9 +98,9 @@ const Contacts = () => {
 
       <Login />
 
-      <div className="mt-4">
+      {/* <div className="mt-4">
         <div>recent</div>
-      </div>
+      </div> */}
 
       <div className="my-4 flex items-center gap-1.5 rounded-lg border border-[#00D743]/80 bg-[#00D743]/50 px-2 py-3">
         <div>{commonIcons.search}</div>

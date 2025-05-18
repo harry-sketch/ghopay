@@ -3,16 +3,12 @@
 import Image from "next/image";
 import { redirect, useRouter } from "next/navigation";
 import React from "react";
-import { useMobile } from "~/app/_hooks/useMobile";
 import { useActiveAccount, useWalletBalance } from "thirdweb/react";
 import { client } from "~/server/web3/client/client";
 import { lens } from "~/server/web3/lib";
 import { api } from "../../../trpc/react";
 
 const Home = () => {
-  const { isMobile } = useMobile();
-  const gg = isMobile ? 4 : 7;
-
   const router = useRouter();
 
   const activeAccount = useActiveAccount();
@@ -62,7 +58,7 @@ const Home = () => {
         <div className="mt-1 text-xl font-medium">{data?.displayValue} GHO</div>
       </div>
 
-      <div className="flex w-full flex-col items-start capitalize">
+      {/* <div className="flex w-full flex-col items-start capitalize">
         <div className="mb-2 text-xl font-medium capitalize">recent</div>
         <div className="grid grid-cols-5 gap-2 md:grid-cols-8">
           {Array.from({ length: gg }).map((_, i) => (
@@ -78,7 +74,7 @@ const Home = () => {
             View more
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="my-5 flex w-full items-center justify-center gap-2 md:my-10">
         <button
