@@ -84,6 +84,10 @@ const Contacts = () => {
     })();
   }, [authenticatedUser?.address]);
 
+  useEffect(() => {
+    console.log({ searchUserResult });
+  }, [searchUserResult]);
+
   return (
     <div className="flex h-full flex-col px-2 py-10 md:px-0 md:py-20">
       <button
@@ -122,7 +126,7 @@ const Contacts = () => {
         {searchUserResult.length > 0 &&
           searchUserResult?.map(({ localName, ownedBy, id }) => (
             <Link
-              href={`/pay/${localName}&add=${ownedBy}`}
+              href={`/pay/${localName}?add=${ownedBy}`}
               key={`follower-${id}`}
               className="mb-2 flex w-full cursor-pointer items-center gap-4 rounded-lg p-1.5 transition-all duration-300 ease-in-out hover:bg-[#00D743] hover:text-white"
             >
