@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
+
 import React, { use, useEffect, useRef, useState } from "react";
 import { prepareTransaction, sendTransaction } from "thirdweb";
 import { parseEther } from "viem";
@@ -14,9 +15,8 @@ import { useToast } from "~/app/_hooks/useToast";
 type Params = Promise<{ name: string }>;
 
 const PayName = ({ params }: { params: Params }) => {
-  const param = use(params);
-
   const activeAccount = useActiveAccount();
+  const param = use(params);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -127,6 +127,7 @@ const PayName = ({ params }: { params: Params }) => {
         </div>
       </div>
 
+      {/* add confirmation modal */}
       <button
         disabled={isLoading}
         onClick={async () => {

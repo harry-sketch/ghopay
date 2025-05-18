@@ -111,8 +111,6 @@ const Contacts = () => {
             setSearchVal(e.target.value);
             if (e.target.value.length > 0) {
               await handleSearch(e.target.value);
-            } else {
-              setSearchUserResult([]);
             }
           }}
           placeholder="search contacts.."
