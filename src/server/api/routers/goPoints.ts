@@ -20,18 +20,13 @@ export const goPointsRouter = createTRPCRouter({
           where: (s, { eq }) => eq(s.email, email),
           columns: {
             id: true,
-            gpoints: true,
           },
         });
 
         if (!userId) return;
 
-        const prevPoints = userId.gpoints;
-
-        const totalPoints = Number(prevPoints + gpoints);
-
         const val = {
-          gpoints: String(totalPoints),
+          gpoints,
           gplabel,
           userId: userId.id,
         };
@@ -63,9 +58,9 @@ export const goPointsRouter = createTRPCRouter({
           },
         });
 
-        if (!points?.gpoints) return;
+        if (!points) return;
 
-        return Number(points?.gpoints ?? 0);
+        return Number(points.gpoints) ?? 0;
       } catch (error) {
         console.log({ error });
         throw new TRPCError({

@@ -11,9 +11,22 @@ export const userRouter = createTRPCRouter({
       try {
         const { gpoints, email } = input;
 
+        const userId = await ctx.db.query.Users.findFirst({
+          where: (s, { eq }) => eq(s.email, email),
+          columns: {
+            gpoints: true,
+          },
+        });
+
+        if (!userId) return;
+
+        const totalPoints = Number(userId.gpoints) + Number(gpoints);
+
+        console.log({ totalPoints });
+
         await ctx.db
           .update(Users)
-          .set({ gpoints })
+          .set({ gpoints: String(totalPoints) })
           .where(eq(Users.email, email));
       } catch (error) {
         console.log({ error });

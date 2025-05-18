@@ -48,7 +48,7 @@ const Home = () => {
             GP
           </div>
           <div className="text-base font-medium text-[#21701C]">
-            {isLoading ? "loading" : points}
+            {isLoading ? "loading" : (points ?? 0)}
           </div>
         </div>
       </div>
