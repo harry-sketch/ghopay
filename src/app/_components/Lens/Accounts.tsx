@@ -53,14 +53,14 @@ export function AccountSelector({
         ? {
             accountOwner: {
               account: account?.address,
-              app: "0x8A5Cc31180c37078e1EbA2A23c861Acf351a97cE",
+              app: "0xD4A31166de00f7b74d08E92465080CcF8Cf5af44",
               owner: walletClient.account.address,
             },
           }
         : {
             accountManager: {
               account: account.address,
-              app: "0x8A5Cc31180c37078e1EbA2A23c861Acf351a97cE",
+              app: "0xD4A31166de00f7b74d08E92465080CcF8Cf5af44",
               manager: walletClient.account.address,
             },
           };
