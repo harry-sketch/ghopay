@@ -1,22 +1,27 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import QRCode from "react-qr-code";
 import FundWallet from "../_components/FundWallet";
 import { useActiveAccount } from "thirdweb/react";
 
 const Page = () => {
   const [addFunds, setAddFunds] = useState(false);
+  const [amount, setAmount] = useState("0");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const activeAccount = useActiveAccount();
 
   const address = activeAccount?.address ?? "";
 
   console.log(activeAccount?.address);
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
   return (
     <div className="flex h-full w-full flex-col items-center px-2 py-10 md:py-20">
-      {addFunds && <FundWallet />}
+      {addFunds && <FundWallet amount={amount} />}
 
       {!addFunds && (
         <>
@@ -42,6 +47,23 @@ const Page = () => {
               />
             </div>
           </div>
+
+          <input
+            ref={inputRef}
+            type="text"
+            value={amount}
+            onChange={(e) => {
+              setAmount(e.target.value);
+            }}
+            placeholder="enter amount"
+            className="my-5 w-fit text-center text-4xl focus:outline-none"
+          />
+
+          <div className="mx-auto flex w-fit items-center justify-center gap-1 text-xl font-medium">
+            <div>{amount}</div>
+            <div className="text-center">GHO</div>
+          </div>
+
           <button
             type="button"
             className="mx-auto flex w-full cursor-pointer items-center justify-center rounded-lg bg-[#005E0D] p-4 text-lg font-medium text-white md:w-96"
