@@ -102,10 +102,6 @@ const Contacts = () => {
 
       <Login />
 
-      {/* <div className="mt-4">
-        <div>recent</div>
-      </div> */}
-
       <div className="my-4 flex items-center gap-1.5 rounded-lg border border-[#00D743]/80 bg-[#00D743]/50 px-2 py-3">
         <div>{commonIcons.search}</div>
         <input
@@ -130,6 +126,9 @@ const Contacts = () => {
               key={`follower-${id}`}
               className="mb-2 flex w-full cursor-pointer items-center gap-4 rounded-lg p-1.5 transition-all duration-300 ease-in-out hover:bg-[#00D743] hover:text-white"
             >
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-red-400 text-xl capitalize">
+                {localName.slice(0, 1)}
+              </div>
               <div className="text-lg font-medium capitalize">{localName}</div>
             </Link>
           ))}
@@ -140,7 +139,7 @@ const Contacts = () => {
               key={`follower-${follower.username?.id}`}
               className="mb-2 flex w-full cursor-pointer items-center gap-4 rounded-lg p-1.5 transition-all duration-300 ease-in-out hover:bg-[#00D743] hover:text-white"
             >
-              {follower.metadata?.picture && (
+              {follower.metadata?.picture ? (
                 <Image
                   src={follower.metadata?.picture as string}
                   alt={follower.metadata?.name ?? ""}
@@ -148,6 +147,10 @@ const Contacts = () => {
                   height={80}
                   className="rounded-full object-contain"
                 />
+              ) : (
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-red-400 text-xl capitalize">
+                  {follower.username?.localName.slice(0, 1)}
+                </div>
               )}
 
               <div className="text-lg font-medium capitalize">
