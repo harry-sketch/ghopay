@@ -1,31 +1,88 @@
 "use client";
 
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import {
+  evmAddress,
+  type Follower,
+  type Username,
+} from "@lens-protocol/client";
+import { fetchFollowers, fetchUsernames } from "@lens-protocol/client/actions";
+import { lensclient } from "~/app/lens/client";
+import { Login } from "../Lens/Login";
+import { useAuthenticatedUser } from "@lens-protocol/react";
 import { commonIcons } from "~/app/_assets/commonIcons";
-import { genRandomColors } from "~/app/_utils";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+
+const fetchFollowersData = async (address: string) => {
+  const resumed = await lensclient.resumeSession();
+
+  if (resumed.isErr()) {
+    return console.error(resumed.error);
+  }
+
+  const sessionClient = resumed.value;
+  const result = await fetchFollowers(sessionClient, {
+    account: evmAddress(address),
+  });
+
+  if (result.isOk()) {
+    const followers: Follower[] = [...result.value.items];
+    return followers;
+  } else {
+    console.error("Error fetching followers:", result.error);
+    return [];
+  }
+};
 
 const Contacts = () => {
-  const [bg, setBg] = useState<string>("");
+  const [followers, setFollowers] = useState<Follower[]>([]);
+  const { data: authenticatedUser } = useAuthenticatedUser();
 
   const router = useRouter();
 
   const [searchVal, setSearchVal] = useState("");
 
-  const dummyContestArr = [
-    { name: "harsh" },
-    { name: "ramit" },
-    { name: "deepso" },
-    { name: "John Doe" },
-    { name: "Jane Doe" },
-    { name: "Dummy" },
-    { name: "Abc" },
-  ] as const;
+  const [searchUserResult, setSearchUserResult] = useState<Username[]>([]);
+
+  const handleSearch = async (searchUser: string) => {
+    if (searchUser === "") {
+      setSearchUserResult([]);
+      return;
+    }
+
+    const resumed = await lensclient.resumeSession();
+
+    if (resumed.isErr()) {
+      return console.error(resumed.error);
+    }
+
+    const sessionClient = resumed.value;
+
+    const result = await fetchUsernames(sessionClient, {
+      filter: {
+        localNameQuery: searchUser,
+      },
+    });
+
+    if (result.isOk()) {
+      const username: Username[] = [...result.value.items];
+      setSearchUserResult(username);
+    } else {
+      console.error("Error fetching followers:", result.error);
+      return [];
+    }
+  };
 
   useEffect(() => {
-    setBg(genRandomColors());
-  }, []);
+    void (async () => {
+      if (authenticatedUser?.address) {
+        const data = await fetchFollowersData(authenticatedUser.address);
+        if (data) setFollowers(data);
+      }
+    })();
+  }, [authenticatedUser?.address]);
 
   return (
     <div className="flex h-full flex-col px-2 py-10 md:px-0 md:py-20">
@@ -39,6 +96,8 @@ const Contacts = () => {
       </button>
       <div className="text-2xl font-semibold text-black">Search Contacts</div>
 
+      <Login />
+
       <div className="mt-4">
         <div>recent</div>
       </div>
@@ -48,30 +107,50 @@ const Contacts = () => {
         <input
           type="text"
           value={searchVal}
-          onChange={(e) => setSearchVal(e.target.value)}
+          onChange={async (e) => {
+            setSearchVal(e.target.value);
+            if (e.target.value.length > 0) {
+              await handleSearch(e.target.value);
+            }
+          }}
           placeholder="search contacts.."
           className="w-full bg-transparent py-1 text-base font-medium text-black placeholder:text-black focus:outline-none"
         />
       </div>
 
-      <div className="h-[26.5rem] overflow-y-auto rounded-lg bg-white p-4">
-        {dummyContestArr.map(({ name }) => (
-          <Link
-            href={`/pay/${name}?customBg=${encodeURIComponent(bg)}`}
-            className="mb-2 flex w-full cursor-pointer items-center gap-4 rounded-lg p-1.5 transition-all duration-300 ease-in-out hover:bg-[#00D743] hover:text-white"
-            key={name}
-          >
-            <div
-              className="flex h-16 w-16 items-center justify-center rounded-full text-xl font-bold uppercase"
-              style={{
-                backgroundColor: bg,
-              }}
+      <div className="h-[26.5rem] overflow-y-auto rounded-lg bg-white">
+        {searchUserResult.length > 0 &&
+          searchUserResult?.map(({ localName, ownedBy, id }) => (
+            <Link
+              href={`/pay/${localName}&add=${ownedBy}`}
+              key={`follower-${id}`}
+              className="mb-2 flex w-full cursor-pointer items-center gap-4 rounded-lg p-1.5 transition-all duration-300 ease-in-out hover:bg-[#00D743] hover:text-white"
             >
-              {name.slice(0, 1)}
-            </div>
-            <div className="text-lg font-medium capitalize">{name}</div>
-          </Link>
-        ))}
+              <div className="text-lg font-medium capitalize">{localName}</div>
+            </Link>
+          ))}
+        {searchUserResult.length <= 0 &&
+          followers.map(({ follower }) => (
+            <Link
+              href={`/pay/${follower.username?.localName}?pfp=${follower.metadata?.picture}&add=${follower.address}`}
+              key={`follower-${follower.username?.id}`}
+              className="mb-2 flex w-full cursor-pointer items-center gap-4 rounded-lg p-1.5 transition-all duration-300 ease-in-out hover:bg-[#00D743] hover:text-white"
+            >
+              {follower.metadata?.picture && (
+                <Image
+                  src={follower.metadata?.picture as string}
+                  alt={follower.metadata?.name ?? ""}
+                  width={80}
+                  height={80}
+                  className="rounded-full object-contain"
+                />
+              )}
+
+              <div className="text-lg font-medium capitalize">
+                {follower.username?.localName}
+              </div>
+            </Link>
+          ))}
       </div>
     </div>
   );

@@ -2,27 +2,57 @@
 
 import React from "react";
 import { lightTheme, PayEmbed } from "thirdweb/react";
-import { lens } from "~/server/web3/lib";
+
 import { client } from "~/server/web3/client/client";
+import { defineChain, NATIVE_TOKEN_ADDRESS } from "thirdweb";
+import { useActiveWallet } from "thirdweb/react";
+import { useActiveAccount } from "thirdweb/react";
+
+const lensChain = defineChain({ id: 232 });
 
 const FundWallet = () => {
+  const activeAccount = useActiveAccount();
+
+  const wallet = useActiveWallet();
+
+  console.log({ activeAccount, wallet });
+
   return (
     <PayEmbed
       client={client}
       payOptions={{
-        mode: "fund_wallet",
+        mode: "direct_payment",
         metadata: {
-          name: "Get funds",
+          name: "Get GHO on Lens Chain",
         },
-        prefillBuy: {
-          chain: lens,
-          amount: "0.01",
+        buyWithFiat: {
+          preferredProvider: "STRIPE",
+
+          // enable/disable test mode
         },
-        // ... theme, currency, amounts, payment methods, etc.
+        buyWithCrypto: {
+          // enable/disable test mode
+        },
+        paymentInfo: {
+          chain: lensChain,
+
+          // amount of token to buy
+          amount: "1",
+
+          // Lens Account address
+          sellerAddress: activeAccount?.address ?? "",
+
+          token: {
+            address: NATIVE_TOKEN_ADDRESS,
+            name: "GHO",
+            symbol: "GHO",
+            icon: "https://explorer.lens.xyz/images/gho.png",
+          },
+        },
+        onPurchaseSuccess: (purchase) => {
+          console.log("Purchase success", purchase);
+        },
       }}
-      theme={lightTheme({
-        colors: { modalBg: "hsl(300, 20%, 99%)" },
-      })}
     />
   );
 };

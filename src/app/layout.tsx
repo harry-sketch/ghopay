@@ -1,11 +1,12 @@
 import "~/styles/globals.css";
 
 import { type Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Inter } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { HydrateClient } from "../trpc/server";
-import { ThirdwebProvider } from "thirdweb/react";
+import ClientLayout from "./ClientLayout";
+import { ToastContainer } from "react-toastify";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -13,9 +14,9 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-const geist = Geist({
+const geist = Inter({
   subsets: ["latin"],
-  variable: "--font-geist-sans",
+  variable: "--font-inter",
 });
 
 export default function RootLayout({
@@ -24,14 +25,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable} `}>
       <body>
+        <ToastContainer position="bottom-right" />
         <TRPCReactProvider>
-          <ThirdwebProvider>
-            <HydrateClient>
-              <main className="mx-auto h-full max-w-full md:h-screen md:max-w-xl">
-                {children}
-              </main>
-            </HydrateClient>
-          </ThirdwebProvider>
+          <HydrateClient>
+            <main className="mx-auto h-full max-w-full md:h-screen md:max-w-xl">
+              <ClientLayout> {children}</ClientLayout>
+            </main>
+          </HydrateClient>
         </TRPCReactProvider>
       </body>
     </html>
