@@ -58,54 +58,55 @@ const History = () => {
           ? allTransactions?.map(
               ({ amount, id, transactionHash, transactionTo }) => {
                 return (
-                  <div key={id}>
-                    <div className="flex w-full items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div>{id}.</div>
+                  <div
+                    className="mb-5 flex w-full items-center justify-between"
+                    key={id}
+                  >
+                    <div className="flex items-center gap-2">
+                      <div>{id}.</div>
 
-                        <div>{`${transactionTo.slice(0, 5)}....${transactionTo.slice(-5)}`}</div>
-                      </div>
+                      <div>{`${transactionTo.slice(0, 5)}....${transactionTo.slice(-5)}`}</div>
+                    </div>
 
-                      <div>
-                        <div>{amount}</div>
+                    <div>
+                      <div>{amount}</div>
 
-                        <button
-                          className="flex cursor-pointer items-center gap-1"
-                          type="button"
-                          onClick={() =>
-                            window.open(
-                              `https://explorer.lens.xyz/tx/${transactionHash}`,
-                              "_blank",
-                            )
-                          }
-                        >
-                          <div>{`${transactionHash.slice(0, 5)}....${transactionHash.slice(-5)}`}</div>
-                          <div>
-                            <svg
-                              width="17"
-                              height="16"
-                              viewBox="0 0 17 16"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M12.2996 10V4M12.2996 4H6.29964M12.2996 4L4.46631 11.8333"
-                                stroke="#000"
-                                strokeOpacity="0.6"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          </div>
-                        </button>
-                      </div>
+                      <button
+                        className="flex cursor-pointer items-center gap-1"
+                        type="button"
+                        onClick={() =>
+                          window.open(
+                            `https://explorer.lens.xyz/tx/${transactionHash}`,
+                            "_blank",
+                          )
+                        }
+                      >
+                        <div>{`${transactionHash.slice(0, 5)}....${transactionHash.slice(-5)}`}</div>
+                        <div>
+                          <svg
+                            width="17"
+                            height="16"
+                            viewBox="0 0 17 16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M12.2996 10V4M12.2996 4H6.29964M12.2996 4L4.46631 11.8333"
+                              stroke="#000"
+                              strokeOpacity="0.6"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </div>
+                      </button>
                     </div>
                   </div>
                 );
               },
             )
-          : ""}
+          : "no results found"}
       </div>
     </div>
   );

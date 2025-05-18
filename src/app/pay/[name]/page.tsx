@@ -49,10 +49,6 @@ const PayName = ({ params }: { params: Params }) => {
 
   const [amount, setAmount] = useState("0");
 
-  useEffect(() => {
-    console.log({ address });
-  }, [address]);
-
   const handleTxn = async (address: string, amount: string) => {
     try {
       if (!activeAccount) return;
