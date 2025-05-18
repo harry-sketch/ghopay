@@ -5,10 +5,13 @@ import React, { useRef, useState, useEffect } from "react";
 import QRCode from "react-qr-code";
 import FundWallet from "../_components/FundWallet";
 import { useActiveAccount } from "thirdweb/react";
+import { commonIcons } from "../_assets/commonIcons";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
   const [addFunds, setAddFunds] = useState(false);
   const [amount, setAmount] = useState("0");
+  const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const activeAccount = useActiveAccount();
@@ -37,10 +40,10 @@ const Page = () => {
               GHOPay
             </div>
           </div>
-          <div className="my-10">
+          <div className="my-5">
             <div className="rounded-2xl border-8 border-[#B3EE41] p-4">
               <QRCode
-                size={500}
+                size={300}
                 style={{ height: "auto", maxWidth: "100%", width: "100%" }}
                 value={address}
                 viewBox={`0 0 500 500`}
@@ -56,20 +59,30 @@ const Page = () => {
               setAmount(e.target.value);
             }}
             placeholder="enter amount"
-            className="my-5 w-fit text-center text-4xl focus:outline-none"
+            className="w-fit text-center text-4xl focus:outline-none"
           />
 
           <div className="mx-auto flex w-fit items-center justify-center gap-1 text-xl font-medium">
-            <div>{amount}</div>
+            <div className="mb-0.5">{amount}</div>
             <div className="text-center">GHO</div>
           </div>
 
           <button
             type="button"
-            className="mx-auto flex w-full cursor-pointer items-center justify-center rounded-lg bg-[#005E0D] p-4 text-lg font-medium text-white md:w-96"
+            className="mx-auto mt-4 flex w-full cursor-pointer items-center justify-center rounded-lg bg-[#005E0D] p-4 text-lg font-medium text-white md:w-96"
             onClick={() => setAddFunds(true)}
           >
             Add Funds
+          </button>
+
+          <button
+            onClick={() => router.push("/")}
+            type="button"
+            className="mx-auto mt-4 flex w-full cursor-pointer items-center justify-center rounded-lg p-4 text-lg font-medium text-black md:w-96"
+          >
+            <div>{commonIcons["chevron-left"]}</div>
+
+            <div>Go Back</div>
           </button>
         </>
       )}

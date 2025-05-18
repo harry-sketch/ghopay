@@ -7,6 +7,7 @@ import { useMobile } from "~/app/_hooks/useMobile";
 import { useActiveAccount, useWalletBalance } from "thirdweb/react";
 import { client } from "~/server/web3/client/client";
 import { lens } from "~/server/web3/lib";
+import { api } from "../../../trpc/react";
 
 const Home = () => {
   const { isMobile } = useMobile();
@@ -15,6 +16,10 @@ const Home = () => {
   const router = useRouter();
 
   const activeAccount = useActiveAccount();
+
+  const { data: points, isLoading } = api.goPoints.gData.useQuery({
+    address: activeAccount?.address ?? "",
+  });
 
   const { data } = useWalletBalance({
     address: activeAccount?.address,
@@ -46,7 +51,9 @@ const Home = () => {
           <div className="rounded-2xl bg-[#E7E34E] p-1.5 text-sm font-normal text-black">
             GP
           </div>
-          <div className="text-base font-medium text-[#21701C]">1000</div>
+          <div className="text-base font-medium text-[#21701C]">
+            {isLoading ? "loading" : points}
+          </div>
         </div>
       </div>
 

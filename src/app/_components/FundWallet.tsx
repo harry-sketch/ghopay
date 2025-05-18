@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { lightTheme, PayEmbed } from "thirdweb/react";
+import { PayEmbed } from "thirdweb/react";
 
 import { client } from "~/server/web3/client/client";
 import { defineChain, NATIVE_TOKEN_ADDRESS } from "thirdweb";

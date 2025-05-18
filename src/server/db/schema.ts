@@ -31,7 +31,7 @@ export const Users = createTable("user", {
   email: text(),
   lens: text(),
   walletAddress: text().notNull(),
-  gpoints: integer().default(0),
+  gpoints: text(),
   referredBy: text(),
   createdAt: timestamp().defaultNow().notNull(),
   updatedAt: timestamp().$onUpdate(() => new Date()),
@@ -63,7 +63,7 @@ export const Transactions = createTable("transactions", {
 
 export const GhoPoints = createTable("ghoPoints", {
   id: serial().primaryKey(),
-  gpoints: integer().notNull(),
+  gpoints: text(),
   createdAt: timestamp().defaultNow().notNull(),
   updatedAt: timestamp().$onUpdate(() => new Date()),
   gplabel: gPointsEnum("gpoints_label"),

@@ -20,6 +20,8 @@ const PayName = ({ params }: { params: Params }) => {
   const activeAccount = useActiveAccount();
   const param = use(params);
 
+  const utils = api.useUtils();
+
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -28,7 +30,16 @@ const PayName = ({ params }: { params: Params }) => {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { mutateAsync } = api.transaction.sendTransaction.useMutation();
+  const { mutateAsync } = api.transaction.sendTransaction.useMutation({
+    onSuccess: async () => {
+      await utils.transaction.allTransactions.invalidate();
+      await utils.goPoints.gData.invalidate();
+    },
+  });
+
+  const { mutateAsync: addPointsMutation } = api.user.goPoints.useMutation();
+
+  const { mutateAsync: goPointsMutation } = api.goPoints.goPoints.useMutation();
 
   const searchParam = useSearchParams();
 
@@ -68,6 +79,19 @@ const PayName = ({ params }: { params: Params }) => {
           from: activeAccount?.address,
           to: address,
           transactionHash: res.transactionHash,
+        });
+
+        const gpoints = Number(amount) * 0.1;
+
+        await addPointsMutation({
+          email,
+          gpoints: String(gpoints),
+        });
+
+        await goPointsMutation({
+          email,
+          gplabel: "transaction",
+          gpoints: String(gpoints),
         });
 
         toast.success({
