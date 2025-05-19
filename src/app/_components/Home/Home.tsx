@@ -52,7 +52,9 @@ const Home: React.FC<Props> = ({ address }) => {
       <div className="my-5 flex h-40 w-full flex-col items-center justify-center rounded-lg bg-[#00D743]/50 p-4 md:my-10">
         <div className="font-4xl text-4xl font-semibold uppercase">balance</div>
         <div className="mt-1 text-xl font-medium">
-          {isBalanceLoading ? "loading..." : `${data?.displayValue} GHO`}
+          {isBalanceLoading
+            ? "loading..."
+            : `${data?.displayValue.slice(0, 5)} GHO`}
         </div>
       </div>
 
