@@ -5,22 +5,15 @@ import { PayEmbed } from "thirdweb/react";
 
 import { client } from "~/server/web3/client/client";
 import { defineChain, NATIVE_TOKEN_ADDRESS } from "thirdweb";
-import { useActiveWallet } from "thirdweb/react";
-import { useActiveAccount } from "thirdweb/react";
 
 const lensChain = defineChain({ id: 232 });
 
 interface FundWalletProps {
   amount: string;
+  address: string;
 }
 
-const FundWallet = ({ amount }: FundWalletProps) => {
-  const activeAccount = useActiveAccount();
-
-  const wallet = useActiveWallet();
-
-  console.log({ activeAccount, wallet });
-
+const FundWallet = ({ amount, address }: FundWalletProps) => {
   return (
     <PayEmbed
       client={client}
@@ -44,7 +37,7 @@ const FundWallet = ({ amount }: FundWalletProps) => {
           amount: amount,
 
           // Lens Account address
-          sellerAddress: activeAccount?.address ?? "",
+          sellerAddress: address,
 
           token: {
             address: NATIVE_TOKEN_ADDRESS,

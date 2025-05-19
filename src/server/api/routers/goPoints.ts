@@ -1,20 +1,21 @@
 import { TRPCError } from "@trpc/server";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { z } from "zod";
 import { GhoPoints } from "../../db/schema";
 
 export const goPointsRouter = createTRPCRouter({
-  goPoints: publicProcedure
+  goPoints: protectedProcedure
     .input(
       z.object({
         gplabel: z.enum(["referral", "transaction"]),
         gpoints: z.string(),
-        email: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        const { email, gplabel, gpoints } = input;
+        const { gplabel, gpoints } = input;
+
+        const { email } = ctx.user;
 
         const userId = await ctx.db.query.Users.findFirst({
           where: (s, { eq }) => eq(s.email, email),
@@ -41,31 +42,24 @@ export const goPointsRouter = createTRPCRouter({
       }
     }),
 
-  gData: publicProcedure
-    .input(
-      z.object({
-        address: z.string(),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      try {
-        const { address } = input;
+  gData: protectedProcedure.query(async ({ ctx }) => {
+    try {
+      const { walletAddress } = ctx.user;
+      const points = await ctx.db.query.Users.findFirst({
+        where: (s, { eq }) => eq(s.walletAddress, walletAddress),
+        columns: {
+          gpoints: true,
+        },
+      });
 
-        const points = await ctx.db.query.Users.findFirst({
-          where: (s, { eq }) => eq(s.walletAddress, address),
-          columns: {
-            gpoints: true,
-          },
-        });
+      if (!points) return;
 
-        if (!points) return;
-
-        return Number(points.gpoints) ?? 0;
-      } catch (error) {
-        console.log({ error });
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-        });
-      }
-    }),
+      return Number(points.gpoints) ?? 0;
+    } catch (error) {
+      console.log({ error });
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+      });
+    }
+  }),
 });

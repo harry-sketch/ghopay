@@ -36,8 +36,6 @@ export const authRouter = createTRPCRouter({
           where: (s, { eq }) => eq(s.email, input.email),
         });
 
-        console.log({ user });
-
         if (!user)
           throw new TRPCError({
             code: "INTERNAL_SERVER_ERROR",
@@ -47,6 +45,7 @@ export const authRouter = createTRPCRouter({
         await createAndSetToken({
           email: input.email,
           userId: user.id,
+          walletAddress: input.walletAddress,
         });
 
         return true;

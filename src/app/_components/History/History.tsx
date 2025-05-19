@@ -4,12 +4,9 @@ import React from "react";
 import { commonIcons } from "~/app/_assets/commonIcons";
 import { useRouter } from "next/navigation";
 import { api } from "~/trpc/react";
-import { useActiveAccount } from "thirdweb/react";
 
 const History = () => {
   const router = useRouter();
-
-  const activeAccount = useActiveAccount();
 
   // const fetchUserHandler = async (address: string) => {
   //   const resumed = await lensclient.resumeSession();
@@ -31,9 +28,7 @@ const History = () => {
   //   }
   // };
 
-  const { data } = api.transaction.allTransactions.useQuery({
-    address: activeAccount?.address ?? "",
-  });
+  const { data, isLoading } = api.transaction.allTransactions.useQuery();
 
   const allTransactions = data ?? [];
 
@@ -54,10 +49,11 @@ const History = () => {
       </div>
 
       <div className="mt-5 md:mt-10">
-        {allTransactions?.length > 0
-          ? allTransactions?.map(
-              ({ amount, id, transactionHash, transactionTo }, i) => {
-                return (
+        {isLoading
+          ? "loading..."
+          : allTransactions.length > 0
+            ? allTransactions.map(
+                ({ amount, id, transactionHash, transactionTo }, i) => (
                   <div
                     className="mb-5 flex w-full items-center justify-between"
                     key={id}
@@ -65,7 +61,9 @@ const History = () => {
                     <div className="flex items-center gap-2">
                       <div>{i + 1}.</div>
 
-                      <div>{`${transactionTo.slice(0, 5)}....${transactionTo.slice(-5)}`}</div>
+                      <div>
+                        {`${transactionTo.slice(0, 5)}....${transactionTo.slice(-5)}`}
+                      </div>
                     </div>
 
                     <div>
@@ -81,7 +79,9 @@ const History = () => {
                           )
                         }
                       >
-                        <div>{`${transactionHash.slice(0, 5)}....${transactionHash.slice(-5)}`}</div>
+                        <div>
+                          {`${transactionHash.slice(0, 5)}....${transactionHash.slice(-5)}`}
+                        </div>
                         <div>
                           <svg
                             width="17"
@@ -103,10 +103,9 @@ const History = () => {
                       </button>
                     </div>
                   </div>
-                );
-              },
-            )
-          : "no results found"}
+                ),
+              )
+            : "no results found"}
       </div>
     </div>
   );

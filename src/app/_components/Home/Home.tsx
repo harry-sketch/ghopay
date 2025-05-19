@@ -1,31 +1,27 @@
 "use client";
 
 import Image from "next/image";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React from "react";
-import { useActiveAccount, useWalletBalance } from "thirdweb/react";
+import { useWalletBalance } from "thirdweb/react";
 import { client } from "~/server/web3/client/client";
 import { lens } from "~/server/web3/lib";
-import { api } from "../../../trpc/react";
+import { api } from "~/trpc/react";
 
-const Home = () => {
+interface Props {
+  address: string;
+}
+
+const Home: React.FC<Props> = ({ address }) => {
   const router = useRouter();
 
-  const activeAccount = useActiveAccount();
+  const { data: points, isLoading } = api.goPoints.gData.useQuery();
 
-  const { data: points, isLoading } = api.goPoints.gData.useQuery({
-    address: activeAccount?.address ?? "",
-  });
-
-  const { data } = useWalletBalance({
-    address: activeAccount?.address,
+  const { data, isLoading: isBalanceLoading } = useWalletBalance({
+    address,
     chain: lens,
     client: client,
   });
-
-  if (!activeAccount) {
-    redirect("/login");
-  }
 
   return (
     <main className="flex h-full w-full flex-col items-center px-2 py-10 md:h-screen md:px-0 md:py-20">
@@ -55,7 +51,9 @@ const Home = () => {
 
       <div className="my-5 flex h-40 w-full flex-col items-center justify-center rounded-lg bg-[#00D743]/50 p-4 md:my-10">
         <div className="font-4xl text-4xl font-semibold uppercase">balance</div>
-        <div className="mt-1 text-xl font-medium">{data?.displayValue} GHO</div>
+        <div className="mt-1 text-xl font-medium">
+          {isBalanceLoading ? "loading..." : `${data?.displayValue} GHO`}
+        </div>
       </div>
 
       {/* <div className="flex w-full flex-col items-start capitalize">

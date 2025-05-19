@@ -1,15 +1,17 @@
 import { TRPCError } from "@trpc/server";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { z } from "zod";
 import { Users } from "../../db/schema";
 import { eq } from "drizzle-orm";
 
 export const userRouter = createTRPCRouter({
-  goPoints: publicProcedure
-    .input(z.object({ gpoints: z.string(), email: z.string() }))
+  goPoints: protectedProcedure
+    .input(z.object({ gpoints: z.string() }))
     .mutation(async ({ ctx, input }) => {
       try {
-        const { gpoints, email } = input;
+        const { gpoints } = input;
+
+        const { email } = ctx.user;
 
         const userId = await ctx.db.query.Users.findFirst({
           where: (s, { eq }) => eq(s.email, email),
@@ -21,8 +23,6 @@ export const userRouter = createTRPCRouter({
         if (!userId) return;
 
         const totalPoints = Number(userId.gpoints) + Number(gpoints);
-
-        console.log({ totalPoints });
 
         await ctx.db
           .update(Users)
