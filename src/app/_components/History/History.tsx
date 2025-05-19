@@ -56,14 +56,14 @@ const History = () => {
       <div className="mt-5 md:mt-10">
         {allTransactions?.length > 0
           ? allTransactions?.map(
-              ({ amount, id, transactionHash, transactionTo }) => {
+              ({ amount, id, transactionHash, transactionTo }, i) => {
                 return (
                   <div
                     className="mb-5 flex w-full items-center justify-between"
                     key={id}
                   >
                     <div className="flex items-center gap-2">
-                      <div>{id}.</div>
+                      <div>{i + 1}.</div>
 
                       <div>{`${transactionTo.slice(0, 5)}....${transactionTo.slice(-5)}`}</div>
                     </div>
